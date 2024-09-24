@@ -90,7 +90,7 @@ const EscapeSequence: React.FC = () => {
                 }
                 className={`relative sm:text-3xl text-xl sm:w-32  h-12 rounded-lg flex items-center justify-center cursor-pointer transform transition-all duration-500 font-geistMonoVF ${
                   selectedWords[idx]
-                    ? " text-white opacity-100 translate-y-0"
+                    ? " text-[#dcd6b4] opacity-100 translate-y-0"
                     : "bg-gray-100 opacity-0"
                 }`}
               >
