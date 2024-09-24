@@ -1,41 +1,36 @@
-'use client'
+'use client';
 import React, { useState } from "react";
 import Content from "./Content";
-// import { redirect } from 'next/navigation'
-// import { useRouter } from 'next/navigation'
+import Image from "next/image";
 
-interface HomePageProps {}
+// interface HomePageProps {}
 
-const HomePage: React.FC<HomePageProps> = () => {
-  const [entered, setEntered] = useState(false);
-  // const router = useRouter()
+const HomePage: React.FC = () => {
+  const [entered, setEntered] = useState<boolean>(false);
 
-  const handleEnterClick = () => {
+  const handleEnterClick = (): void => {
     setEntered(true);
-    // if (entered) {
-    //   redirect('/login')
-    //   router.push('/login');
-    // }
   };
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-screen overflow-hidden -z-50">
-        <img
+        <Image
           src="/images/homeBg.webp"
           alt="background image"
           className="w-full h-full object-cover object-center"
+          // width={4000}
+          // height={4000}
+          fill={true}
         />
       </div>
       <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-screen overflow-hidden -z-50 bg-[#00000077]"></div>
       <div className="fixed w-[90%] h-[80%] bg-[#00000044] rounded-3xl p-16 -z-40"></div>
       <div className="w-[90%] h-[80%] p-16 overflow-y-auto relative">
         {!entered ? (
-          <Content entered={false} onEnterClick={handleEnterClick} />
+          <Content onEnterClick={handleEnterClick} />
         ) : (
-          // Show something else after clicking "Enter"
-          <div className="text-white text-center">You’ve entered the game!</div>
-          
+          <div className="text-white text-center">You’ve entered the game! replace with video</div>
         )}
       </div>
     </div>
