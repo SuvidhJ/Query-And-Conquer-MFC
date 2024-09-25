@@ -6,7 +6,9 @@ import { BACKEND_URL } from "@/lib/constants";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axiosInstance from "@/lib/axios";
+import { useRouter } from "next/navigation";
 const LoginPage: React.FC = () => {
+  const router = useRouter();
   const [teamName, setTeamName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -28,6 +30,7 @@ const LoginPage: React.FC = () => {
       Cookies.set("token", response.data.token);
       localStorage.setItem("id", response.data.id);
       localStorage.setItem("username", response.data.username);
+      router.push("/doors");
     } catch (error) {
       toast.error("Invalid Credentials");
     }
@@ -46,8 +49,8 @@ const LoginPage: React.FC = () => {
 
       <div className="w-full h-full flex items-center justify-center">
         <div className="w-[90%] h-[80%] max-sm:w-[95%] flex items-center justify-center">
-          <div className="bg-[#00000080] rounded-3xl pb-32 w-full h-full z-0 rounded-lg shadow-md w-full flex flex-col items-center justify-center">
-            <h2 className="text-6xl fot-bold text-white font-semibold text-center mb-6 font-geistMonoVF mb-24">
+          <div className="bg-[#00000080] rounded-3xl pb-32 w-full h-full z-0  shadow-md l flex flex-col items-center justify-center">
+            <h2 className="text-6xl fot-bold text-white font-semibold text-center font-geistMonoVF mb-24">
               LOG IN
             </h2>
             <form

@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
         />
       </div>
       <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-screen overflow-hidden -z-50 bg-[#00000077]"></div>
-      <div className="fixed w-[90%] h-[80%] bg-[#00000044] rounded-3xl p-16 -z-40"></div>
+      <div className="fixed w-[90%] h-[80%]  rounded-3xl p-16 -z-40"></div>
 
       {/* Conditionally Render Content or Video */}
       {!entered ? (
@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
       ) : (
         <div className="sm:w-[90%] sm:h-[80%] max-sm:w-full flex items-center justify-center max-sm:rotate-90 relative">
           <video
-            className="w-full h-full object-cover"
+            className="w-full h-full min-w-[80%]"
             autoPlay
             muted={false}
             onEnded={() => setVideoEnded(true)} // Handle video end
