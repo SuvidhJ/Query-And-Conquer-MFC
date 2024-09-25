@@ -1,22 +1,36 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-
+import axios from "axios";
+import { BACKEND_URL } from "@/lib/constants";
+import { toast } from "react-toastify";
 const LoginPage: React.FC = () => {
   const [teamName, setTeamName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle login logic here, e.g., send login request to API
     console.log("Team Name:", teamName);
     console.log("Password:", password);
+    try {
+      const response = await axios.post(`${BACKEND_URL}/user/login`, {
+        Username: teamName,
+        Password: password,
+      });
+      if (!response.data.token) {
+        toast.error("Invalid Credentials");
+      }
+    } catch (error) {
+      toast.error("Invalid Credentials");
+    }
   };
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-screen overflow-hidden -z-50">
-        <Image fill={true}
+        <Image
+          fill={true}
           src="/images/hauntedHouse.webp"
           alt="background image"
           className="w-full h-full object-cover object-center"

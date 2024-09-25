@@ -1,12 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @font-face {
   font-family: geistMonoVF;
-  src: url(../app/fonts/GeistMonoVF.woff);
+  src: url("/fonts/GeistMonoVF.woff");
 }
 @font-face {
   font-family: geistVF;
-  src: url(../app/fonts/GeistVF.woff);
+  src: url("/fonts/GeistVF.woff");
 }

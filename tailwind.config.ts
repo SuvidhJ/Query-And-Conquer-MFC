@@ -14,8 +14,9 @@ const config: Config = {
       },
       fontFamily: {
         geistMonoVF: "geistMonoVF",
-        geistVF: "geistVF"
-      }
+        geistVF: "geistVF",
+        irish: "Irish Grover",
+      },
     },
   },
   plugins: [],
