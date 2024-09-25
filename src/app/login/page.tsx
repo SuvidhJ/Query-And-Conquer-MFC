@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
-const LoginPage = () => {
-  const [teamName, setTeamName] = useState("");
-  const [password, setPassword] = useState("");
+const LoginPage: React.FC = () => {
+  const [teamName, setTeamName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     // Handle login logic here, e.g., send login request to API
     console.log("Team Name:", teamName);
@@ -15,7 +16,7 @@ const LoginPage = () => {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-screen overflow-hidden -z-50">
-        <img
+        <Image fill={true}
           src="/images/hauntedHouse.webp"
           alt="background image"
           className="w-full h-full object-cover object-center"
@@ -36,7 +37,7 @@ const LoginPage = () => {
                 <div className="w-[500px] max-sm:w-full px-4">
                   <label
                     htmlFor="teamName"
-                    className="block text-2xl font-light text-white font-geistMonoVF "
+                    className="block text-2xl font-light text-white font-geistMonoVF"
                   >
                     TEAM NAME
                   </label>
