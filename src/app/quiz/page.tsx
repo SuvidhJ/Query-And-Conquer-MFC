@@ -1,6 +1,6 @@
 // import React, { useState } from "react";
 import Image from "next/image";
-const page = ({ question }) => {
+const page = () => {
   // const [answer, setAnswer] = useState("");
   // const handleClick = () => {};
   return (

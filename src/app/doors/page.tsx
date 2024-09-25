@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import DoorComponent from "./DoorComponent";
-import { useState } from "react";
 const DoorsPage = () => {
   return (
     <div className="bg-[url('/images/doorbg.png')] relative h-screen w-full overflow-hidden  ">
@@ -13,10 +12,10 @@ const DoorsPage = () => {
         className="absolute top-0 left-0 w-full h-full z-[0]"
       />
       <div className="z-[100] relative flex flex-wrap justify-center gap-40 top-32">
-        <DoorComponent myId={1} className="w-1/2 sm:w-1/4" />
-        <DoorComponent myId={2} className="w-1/2 sm:w-1/4" />
-        <DoorComponent myId={3} className="w-1/2 sm:w-1/4" />
-        <DoorComponent myId={4} className="w-1/2 sm:w-1/4" />
+        <DoorComponent id={1} />
+        <DoorComponent id={2} />
+        <DoorComponent id={3} />
+        <DoorComponent id={4} />
       </div>
     </div>
   );

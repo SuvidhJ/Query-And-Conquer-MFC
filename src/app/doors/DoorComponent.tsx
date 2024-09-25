@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-const DoorComponent = (myId) => {
+const DoorComponent = ({ id }: { id: number }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center" key={id}>
       <Image
         src="/images/nameplate.png"
         alt=""
