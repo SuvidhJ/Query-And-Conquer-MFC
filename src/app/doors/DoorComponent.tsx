@@ -1,12 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { doorIds } from "./page";
 export const doorData = [
   "obsidian liar",
   "onyx hall",
   "shadow crypt",
   "ebon veil",
 ];
-const DoorComponent = ({ id }: { id: number }) => {
+const DoorComponent = ({
+  id,
+  setDoor,
+}: {
+  id: number;
+  setDoor: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   return (
     <div className="flex flex-col items-center" key={id}>
       <Image
@@ -17,7 +24,11 @@ const DoorComponent = ({ id }: { id: number }) => {
         className="w-32 md:w-40 h-auto"
       />
       <Image src="/images/door.png" alt="" width={300} height={200} />
-      <Link href={`/quiz/${doorData[id - 1]}`}>
+      <div
+        onClick={() => {
+          setDoor(id - 1);
+        }}
+      >
         <div className="relative cursor-pointer hover:scale-110 transition-all duration-200 ease-linear">
           <Image
             src="/images/Start.png"
@@ -39,7 +50,7 @@ const DoorComponent = ({ id }: { id: number }) => {
             />
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

@@ -1,26 +1,102 @@
 "use client";
+import { doorData } from "@/app/doors/DoorComponent";
+import axiosInstance from "@/lib/axios";
+import { BACKEND_URL } from "@/lib/constants";
+import VerifyUser from "@/lib/routeSecure";
+import axios from "axios";
 // import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 type doors = "obsidian liar" | "onyx hall" | "shadow crypt" | "ebon veil" | "";
+type data = {
+  Question: string;
+  QuestiondId: number;
+  Room: string;
+  Answered: string;
+};
 export default function DoorPage({ params }: { params: { id: string } }) {
   const [answer, setAnswer] = useState("");
+  const [error, setError] = useState(false);
   const [doorName, setDoorName] = useState<doors>("");
+  const [data, setData] = useState<data | null>(null);
+  const router = useRouter();
+  const [fetchAgain, setFetchAgain] = useState(0);
+  const [escapeOpen, setEscapeOpen] = useState(false);
   // const handleClick = () => {};
   useEffect(() => {
-    console.log(answer);
-    if (
-      !["obsidian liar", "onyx hall", "shadow crypt", "ebon veil"].includes(
-        params.id.split("%20").join(" ")
-      )
-    ) {
+    if (!doorData.includes(params.id.split("%20").join(" "))) {
       toast.error("Invalid Quiz Access");
     } else {
       setDoorName(params.id.split("%20").join(" ") as doors);
     }
-  }, [answer]);
+  }, []);
+  useEffect(() => {
+    const userId = localStorage.getItem("id");
+    (async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/question/${userId}/getQuestions`
+        );
+        if (response.status !== 200) {
+          toast.error("Failed to fetch question! please try again");
+          setError(true);
+          return;
+        }
+        setData(response.data);
+        setError(false);
+      } catch (error) {
+        toast.error("Failed to fetch the questions");
+        setError(true);
+        // router.push("/doors");
+      }
+    })();
+  }, [fetchAgain]);
+  async function handleSubmitQuestion() {
+    const userId = localStorage.getItem("id");
+    if (!answer || answer === "") {
+      toast.error("Answer can't be empty");
+      return;
+    }
+    if (!userId) return;
+    try {
+      const response = await axiosInstance.post(
+        `/question/${userId}/postAnswer`,
+        {
+          Room: data?.Room,
+          QuestionId: data?.QuestiondId,
+          Question: data?.Question,
+          Answer: answer,
+        }
+      );
+      if (response.data.error) {
+        toast.error(response.data.error || "Failed to submit answer!");
+        return;
+      }
+      if (response.data.message) {
+        toast.success(response.data.success || "Answer submitted!");
+      }
+      setFetchAgain(fetchAgain + 1);
+    } catch (error) {
+      toast.error("Failed to submit answer!");
+    }
+  }
+  async function handleClickEscape() {
+    try {
+      const userId = localStorage.getItem("id");
+      const response = await axiosInstance.post(`/room/${userId}/escape`, {
+        RoomEntered: data?.Room,
+      });
+      if (response.status === 200) {
+        toast.success("You have escaped the room!");
+        router.push("/doors");
+      }
+    } catch (error) {
+      toast.error("Failed to escape the room!");
+    }
+  }
   return (
     <div className="bg-[url('/images/bg1.png')] bg-cover h-screen w-full overflow-hidden flex flex-col items-center justify-center relative gap-6 pt-4">
       {doorName.length > 0 && (
@@ -38,10 +114,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
             </h1>
             <div className="flex flex-col w-full h-full mt-12 gap-10 relative z-10">
               <p className=" bg-transparent outline-none text-white mx-auto md:w-3/4 w-full py-2 text-sm md:text-base ">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi
-                corporis eaque vitae neque recusandae, quasi doloremque?
-                Officia, repudiandae aut impedit et vero distinctio qui commodi,
-                aspernatur nobis quam, a accusantium?
+                {data?.Question}
               </p>
               <input
                 type="text"
@@ -50,7 +123,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
                 onChange={(e) => setAnswer(e.target.value.trim().toLowerCase())}
               />
               <button
-                // onClick={handleClick}
+                onClick={handleSubmitQuestion}
                 className="bg-[#B69E75] w-fit rounded-lg px-12 mx-auto text-center pt-2 pb-2 font-geistMonoVF font-extrabold"
               >
                 SUBMIT
@@ -58,10 +131,42 @@ export default function DoorPage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="w-[90%] mx-auto">
-            <button className="bg-[#B69E75] rounded-lg pl-6 pr-6 pt-2 pb-2 font-geistMonoVF font-extrabold">
+            <button
+              className="bg-[#B69E75] rounded-lg pl-6 pr-6 pt-2 pb-2 font-geistMonoVF font-extrabold"
+              onClick={() => {
+                setEscapeOpen(true);
+              }}
+            >
               ESCAPE
             </button>
           </div>
+          {escapeOpen && (
+            <div className="min-w-[90%] md:min-w-[30%] p-8 rounded-md min-h-40 flex items-center justify-center flex-col fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 z-[400] border-2 border-red-500 text-white font-geistVF">
+              <h1 className="text-xl font-semibold">
+                Are you sure you want to Escape the room?
+              </h1>
+              <p className="text-sm">
+                You can&apos;t come back to the room again! and some points will
+                be dedcuted!
+              </p>
+              <div className="w-full flex items-center gap-4 mt-8">
+                <button
+                  className="w-full px-4 py-2 rounded-md text-white"
+                  onClick={() => {
+                    setEscapeOpen(false);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="w-full px-4 py-2 rounded-md text-white bg-red-500"
+                  onClick={handleClickEscape}
+                >
+                  Escape
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
       {doorName.length === 0 && (

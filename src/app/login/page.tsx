@@ -4,23 +4,30 @@ import Image from "next/image";
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/constants";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import axiosInstance from "@/lib/axios";
 const LoginPage: React.FC = () => {
   const [teamName, setTeamName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle login logic here, e.g., send login request to API
-    console.log("Team Name:", teamName);
-    console.log("Password:", password);
+    if (!teamName || !password) {
+      toast.error("Please fill all the fields");
+      return;
+    }
     try {
-      const response = await axios.post(`${BACKEND_URL}/user/login`, {
+      const response = await axiosInstance.post("/user/login", {
         Username: teamName,
         Password: password,
       });
       if (!response.data.token) {
         toast.error("Invalid Credentials");
+        return;
       }
+      Cookies.set("token", response.data.token);
+      localStorage.setItem("id", response.data.id);
+      localStorage.setItem("username", response.data.username);
     } catch (error) {
       toast.error("Invalid Credentials");
     }
