@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
 import VerifyUser from "@/lib/routeSecure";
-export const doorIds = ["A", "B", "C", "D"];
+import { doorIds } from "@/lib/constants";
 const DoorsPage = () => {
   const router = useRouter();
   const [selectedDoor, setSelectedDoor] = useState<number>(-1);

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { doorIds } from "./page";
 export const doorData = [
   "obsidian liar",
   "onyx hall",

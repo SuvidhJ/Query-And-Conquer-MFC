@@ -1,8 +1,7 @@
 "use client";
 import { doorData } from "@/app/doors/DoorComponent";
-import { doorIds } from "@/app/doors/page";
 import axiosInstance from "@/lib/axios";
-import { BACKEND_URL } from "@/lib/constants";
+import { BACKEND_URL, doorIds } from "@/lib/constants";
 import VerifyUser from "@/lib/routeSecure";
 import axios from "axios";
 // import React, { useState } from "react";
