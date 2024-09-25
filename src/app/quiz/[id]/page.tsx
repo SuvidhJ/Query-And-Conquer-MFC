@@ -31,6 +31,10 @@ export default function DoorPage({ params }: { params: { id: string } }) {
   const [doorId, setDoorId] = useState("");
   // const handleClick = () => {};
   useEffect(() => {
+    const secured = VerifyUser();
+    if (!secured) {
+      router.push("/login");
+    }
     if (!doorData.includes(params.id.split("%20").join(" "))) {
       toast.error("Invalid Quiz Access");
     } else {
@@ -109,6 +113,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       }
     } catch (error) {
       toast.error("Failed to escape the room!");
+      setEscapeOpen(false);
     }
   }
   return (

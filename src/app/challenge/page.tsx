@@ -1,11 +1,18 @@
-'use client';
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import axiosInstance from "@/lib/axios";
+import { toast } from "react-toastify";
 
 const EscapeSequence: React.FC = () => {
-  const randomWords = ["apple", "banana", "cherry", "date"];
+  const [randomWords, setRandomWords] = useState<string[]>([
+    "apple",
+    "banana",
+    "cherry",
+    "date",
+  ]);
   const correctSequence = ["apple", "banana", "cherry", "date"];
-
+  const [place, setPlace] = useState("");
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -20,7 +27,18 @@ const EscapeSequence: React.FC = () => {
       selectedWords.filter((selectedWord) => selectedWord !== word)
     );
   };
-
+  async function getPlace() {
+    try {
+      const id = localStorage.getItem("id");
+      if (!id) return;
+      const response = await axiosInstance.get(`user/${id}/location`);
+      if (response.data) {
+        setPlace(response.data.place);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch the location");
+    }
+  }
   const checkSequence = () => {
     if (selectedWords.length === 4) {
       const isSequenceCorrect = selectedWords.every(
@@ -28,8 +46,9 @@ const EscapeSequence: React.FC = () => {
       );
       if (isSequenceCorrect) {
         setIsCorrect(true);
+        getPlace();
       } else {
-        alert("Try Again!");
+        toast.error("Try Again!");
       }
     }
   };
@@ -48,7 +67,7 @@ const EscapeSequence: React.FC = () => {
       </div>
       <div className="fixed inset-0 w-full h-full overflow-hidden -z-50 bg-black opacity-45"></div>
 
-      {isCorrect ? (
+      {isCorrect || place ? (
         <div className="flex items-center justify-center w-full h-full transition-opacity duration-1000 opacity-100">
           <Image
             fill
@@ -56,8 +75,10 @@ const EscapeSequence: React.FC = () => {
             alt="Success"
             className="w-[50%] h-[50%] object-cover fixed -z-30"
           />
-          <p className="font-geistMonoVF tracking-wide text-4xl pb-28 max-sm:text-2xl max-sm:pb-20 text-white">
-            You have<br />Escaped
+          <p className="font-geistMonoVF tracking-wide text-4xl pb-28 relative -top-8 text-center font-bold max-sm:text-2xl max-sm:pb-20 text-black">
+            SECRET
+            <br />
+            {place}
           </p>
         </div>
       ) : (

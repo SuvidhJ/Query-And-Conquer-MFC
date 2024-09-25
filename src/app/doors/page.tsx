@@ -5,6 +5,7 @@ import DoorComponent, { doorData } from "./DoorComponent";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
+import VerifyUser from "@/lib/routeSecure";
 export const doorIds = ["A", "B", "C", "D"];
 const DoorsPage = () => {
   const router = useRouter();
@@ -31,7 +32,6 @@ const DoorsPage = () => {
         }
       } catch (error) {
         setMutex(false);
-        // router.push(`/quiz/${doorData[selectedDoor]}`);
 
         toast.error("Failed to enter the room");
       } finally {
@@ -49,11 +49,21 @@ const DoorsPage = () => {
         className="absolute top-0 left-0 w-full h-full z-[0]"
       />
       {!mutex && (
-        <div className="z-[100] relative grid grid-cols-2 gap-8 lg:gap-0 lg:grid-cols-4  top-32">
-          <DoorComponent id={1} setDoor={setSelectedDoor} />
-          <DoorComponent id={2} setDoor={setSelectedDoor} />
-          <DoorComponent id={3} setDoor={setSelectedDoor} />
-          <DoorComponent id={4} setDoor={setSelectedDoor} />
+        <div className="flex flex-col  w-full h-full items-center justify-between">
+          <div className="z-[100] relative grid grid-cols-2 gap-8 lg:gap-0 lg:grid-cols-4  top-32">
+            <DoorComponent id={1} setDoor={setSelectedDoor} />
+            <DoorComponent id={2} setDoor={setSelectedDoor} />
+            <DoorComponent id={3} setDoor={setSelectedDoor} />
+            <DoorComponent id={4} setDoor={setSelectedDoor} />
+          </div>
+          <button
+            className="px-12 py-2 bg-[#7d4a34] relative z-[100] rounded-full text-white border-2 border-black font-geistMonoVF w-fit mb-16"
+            onClick={() => {
+              router.push("/challenge");
+            }}
+          >
+            Decrypt the clues
+          </button>
         </div>
       )}
       {mutex && (
