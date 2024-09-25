@@ -1,5 +1,6 @@
 "use client";
 import { doorData } from "@/app/doors/DoorComponent";
+import { doorIds } from "@/app/doors/page";
 import axiosInstance from "@/lib/axios";
 import { BACKEND_URL } from "@/lib/constants";
 import VerifyUser from "@/lib/routeSecure";
@@ -13,7 +14,7 @@ import { toast } from "react-toastify";
 type doors = "obsidian liar" | "onyx hall" | "shadow crypt" | "ebon veil" | "";
 type data = {
   Question: string;
-  QuestiondId: number;
+  QuestionId: number;
   Room: string;
   Answered: string;
 };
@@ -25,6 +26,9 @@ export default function DoorPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [fetchAgain, setFetchAgain] = useState(0);
   const [escapeOpen, setEscapeOpen] = useState(false);
+  const [clue, setClue] = useState("");
+  const [isCluePresent, setIsCluePresent] = useState(false);
+  const [doorId, setDoorId] = useState("");
   // const handleClick = () => {};
   useEffect(() => {
     if (!doorData.includes(params.id.split("%20").join(" "))) {
@@ -45,7 +49,12 @@ export default function DoorPage({ params }: { params: { id: string } }) {
           setError(true);
           return;
         }
-        setData(response.data);
+        if (response.data.message) {
+          setIsCluePresent(true);
+          setClue(response.data.message);
+        } else {
+          setData(response.data);
+        }
         setError(false);
       } catch (error) {
         toast.error("Failed to fetch the questions");
@@ -62,11 +71,12 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     }
     if (!userId) return;
     try {
+      console.log(data);
       const response = await axiosInstance.post(
         `/question/${userId}/postAnswer`,
         {
           Room: data?.Room,
-          QuestionId: data?.QuestiondId,
+          QuestionId: data?.QuestionId,
           Question: data?.Question,
           Answer: answer,
         }
@@ -84,10 +94,14 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     }
   }
   async function handleClickEscape() {
+    const index = doorData.findIndex(
+      (door) => door === params.id.split("%20").join(" ")
+    );
+    const room = doorIds[index];
     try {
       const userId = localStorage.getItem("id");
       const response = await axiosInstance.post(`/room/${userId}/escape`, {
-        RoomEntered: data?.Room,
+        RoomEntered: room,
       });
       if (response.status === 200) {
         toast.success("You have escaped the room!");
@@ -99,7 +113,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
   }
   return (
     <div className="bg-[url('/images/bg1.png')] bg-cover h-screen w-full overflow-hidden flex flex-col items-center justify-center relative gap-6 pt-4">
-      {doorName.length > 0 && (
+      {doorName.length > 0 && !isCluePresent && (
         <>
           <div className="relative w-[90%] h-[80vh] flex flex-col p-8">
             <Image
@@ -169,15 +183,36 @@ export default function DoorPage({ params }: { params: { id: string } }) {
           )}
         </>
       )}
+      {isCluePresent && (
+        <div className="text-2xl text-white font-geistMonoVF flex flex-col items-center justify-center">
+          <h1>Your Clue</h1>
+          <br />
+          <h3 className="font-bold text-4xl">{clue.split(":")[1]}</h3>
+        </div>
+      )}
       {doorName.length === 0 && (
-        <div className="bg-[#00000050] backdrop-blur-sm w-1/2 h-1/2 flex flex-col gap-3 items-center justify-center  font-irish text-4xl font-semibold rounded-xl text-white">
-          <p>Please Select a valid door</p>
-          <Link
-            href="/doors"
-            className="text-base text-white bg-black px-12 py-3 rounded-md font-geistMonoVF"
+        <>
+          <div className="bg-[#00000050] backdrop-blur-sm w-1/2 h-1/3 flex flex-col gap-3 items-center justify-center  font-irish text-4xl font-semibold rounded-xl text-white">
+            {!isCluePresent && <p>Please Select a valid door</p>}
+            <Link
+              href="/doors"
+              className="text-base text-white bg-black px-12 py-3 rounded-md font-geistMonoVF"
+            >
+              Go Back
+            </Link>
+          </div>
+        </>
+      )}
+      {isCluePresent && (
+        <div className="w-[90%] mx-auto">
+          <button
+            className="bg-[#B69E75] rounded-lg pl-6 pr-6 pt-2 pb-2 font-geistMonoVF font-extrabold"
+            onClick={() => {
+              handleClickEscape();
+            }}
           >
-            Go Back
-          </Link>
+            ESCAPE
+          </button>
         </div>
       )}
     </div>
