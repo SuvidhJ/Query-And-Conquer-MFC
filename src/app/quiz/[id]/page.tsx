@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 type doors = "obsidian liar" | "onyx hall" | "shadow crypt" | "ebon veil" | "";
 type data = {
@@ -117,6 +118,15 @@ export default function DoorPage({ params }: { params: { id: string } }) {
   }
   return (
     <div className="bg-[url('/images/bg1.png')] bg-cover h-screen w-full overflow-hidden flex flex-col items-center justify-center relative gap-6 pt-4">
+      <button
+        className="text-sm font-semibold font-geistMonoVF bg-black absolute top-2 right-2 text-white px-12 py-2 rounded-md"
+        onClick={() => {
+          Cookies.remove("token");
+          router.push("/login");
+        }}
+      >
+        Logout
+      </button>
       {doorName.length > 0 && !isCluePresent && (
         <>
           <div className="relative w-[90%] h-[80vh] flex flex-col p-8">

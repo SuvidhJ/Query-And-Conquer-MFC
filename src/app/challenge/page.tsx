@@ -5,7 +5,7 @@ import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
 import VerifyUser from "@/lib/routeSecure";
 import { useRouter } from "next/navigation";
-
+import Cookies from "js-cookie";
 const EscapeSequence: React.FC = () => {
   const router = useRouter();
   const [randomWords, setRandomWords] = useState<string[]>([
@@ -64,6 +64,7 @@ const EscapeSequence: React.FC = () => {
       const response = await axiosInstance.get(`/user/${id}/roomstatus`);
       const data = response.data.IsRoomsDone;
       const words = [];
+      console.log(data);
       if (data) {
         if (data.RoomA) {
           words.push("del");
@@ -93,6 +94,15 @@ const EscapeSequence: React.FC = () => {
   }, []);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen">
+      <button
+        className="text-sm font-semibold font-geistMonoVF bg-black absolute top-2 right-2 text-white px-12 py-2 rounded-md"
+        onClick={() => {
+          Cookies.remove("token");
+          router.push("/login");
+        }}
+      >
+        Logout
+      </button>
       <div className="fixed inset-0 w-full h-full overflow-hidden -z-50">
         <Image
           fill

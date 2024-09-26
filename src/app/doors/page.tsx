@@ -7,6 +7,7 @@ import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
 import VerifyUser from "@/lib/routeSecure";
 import { doorIds } from "@/lib/constants";
+import Cookies from "js-cookie";
 const DoorsPage = () => {
   const router = useRouter();
   const [selectedDoor, setSelectedDoor] = useState<number>(-1);
@@ -48,6 +49,15 @@ const DoorsPage = () => {
         height={1080}
         className="absolute top-0 left-0 w-full h-full z-[0]"
       />
+      <button
+        className="text-sm font-semibold font-geistMonoVF bg-black absolute top-2 right-2 text-white px-12 py-2 rounded-md"
+        onClick={() => {
+          Cookies.remove("token");
+          router.push("/login");
+        }}
+      >
+        Logout
+      </button>
       {!mutex && (
         <div className="flex flex-col  w-full h-full items-center justify-between">
           <div className="z-[100] relative grid grid-cols-2 gap-8 lg:gap-0 lg:grid-cols-4  top-32">
