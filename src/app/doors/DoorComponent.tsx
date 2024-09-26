@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 export const doorData = [
-  "obsidian liar",
+  "obsidian lair",
   "onyx hall",
   "shadow crypt",
   "ebon veil",
