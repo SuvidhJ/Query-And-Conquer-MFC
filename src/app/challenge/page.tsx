@@ -11,7 +11,7 @@ const EscapeSequence: React.FC = () => {
     "cherry",
     "date",
   ]);
-  const correctSequence = ["apple", "banana", "cherry", "date"];
+  const correctSequence = ["D", "C", "A", "B"];
   const [place, setPlace] = useState("");
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -52,7 +52,37 @@ const EscapeSequence: React.FC = () => {
       }
     }
   };
-
+  async function getWords() {
+    try {
+      const id = localStorage.getItem("id");
+      if (!id) {
+        throw new Error("Failed to fetch the clues!");
+      }
+      const response = await axiosInstance.get(`/user/${id}/roomstatus`);
+      const data = response.data.IsRoomsDone;
+      const words = [];
+      if (data) {
+        if (data.RoomA) {
+          words.push("A");
+        }
+        if (data.roomB) {
+          words.push("B");
+        }
+        if (data.roomC) {
+          words.push("C");
+        }
+        if (data.roomD) {
+          words.push("D");
+        }
+      }
+      setRandomWords(words);
+    } catch (error) {
+      toast.error("Failed to fetch the clues!");
+    }
+  }
+  useEffect(() => {
+    getWords();
+  }, []);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen">
       <div className="fixed inset-0 w-full h-full overflow-hidden -z-50">

@@ -37,9 +37,10 @@ const HomePage: React.FC = () => {
           <Content onEnterClick={handleEnterClick} />
         </div>
       ) : (
-        <div className="sm:w-[90%] sm:h-[80%] max-sm:w-full flex items-center justify-center  relative">
+        <div className=" flex items-center justify-center fixed top-0 left-0 w-screen">
+          <div className="w-full h-screen bg-black absolute top-0 left-0 z-[-1]"></div>
           <video
-            className="w-full h-full min-w-[80%]"
+            className="w-screen h-screen relative z-100 "
             autoPlay
             muted={false}
             onEnded={() => setVideoEnded(true)} // Handle video end
