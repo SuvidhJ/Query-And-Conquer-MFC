@@ -14,7 +14,7 @@ export default function AdminPage() {
   const [scoreChange, setScoreChange] = useState("0");
   async function getLeaderboardData() {
     try {
-      const response = await axiosInstance.get("/admin/leaderboard");
+      const response = await axiosInstance.get("/leaderboard");
       if (!response.data) {
         return;
       }

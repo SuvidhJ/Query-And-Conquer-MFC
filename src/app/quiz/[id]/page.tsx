@@ -58,6 +58,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
           setClue(response.data.message);
         } else {
           setData(response.data);
+          setAnswer("");
         }
         setError(false);
       } catch (error) {
