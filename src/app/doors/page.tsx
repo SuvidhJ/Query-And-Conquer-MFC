@@ -12,10 +12,10 @@ const DoorsPage = () => {
   const [selectedDoor, setSelectedDoor] = useState<number>(-1);
   const [mutex, setMutex] = useState(false);
   useEffect(() => {
-    // const secured = VerifyUser();
-    // if (!secured) {
-    //   router.push("/login");
-    // }
+    const secured = VerifyUser();
+    if (!secured) {
+      router.push("/login");
+    }
     if (selectedDoor === -1) return;
     if (!doorIds[selectedDoor]) return;
     const userId = localStorage.getItem("id");

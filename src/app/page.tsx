@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
             muted={false}
             onEnded={() => setVideoEnded(true)} // Handle video end
           >
-            <source src="/images/introVid.webm" type="video/webm" />
+            <source src="/images/ctsvid.webm" type="video/webm" />
             Your browser does not support the video tag...
           </video>
 

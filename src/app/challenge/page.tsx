@@ -3,15 +3,18 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
+import VerifyUser from "@/lib/routeSecure";
+import { useRouter } from "next/navigation";
 
 const EscapeSequence: React.FC = () => {
+  const router = useRouter();
   const [randomWords, setRandomWords] = useState<string[]>([
     "apple",
     "banana",
     "cherry",
     "date",
   ]);
-  const correctSequence = ["D", "C", "A", "B"];
+  const correctSequence = ["supervivencia", "del", "más", "apto"];
   const [place, setPlace] = useState("");
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -63,16 +66,16 @@ const EscapeSequence: React.FC = () => {
       const words = [];
       if (data) {
         if (data.RoomA) {
-          words.push("A");
+          words.push("del");
         }
         if (data.roomB) {
-          words.push("B");
+          words.push("apto");
         }
         if (data.roomC) {
-          words.push("C");
+          words.push("mas");
         }
         if (data.roomD) {
-          words.push("D");
+          words.push("supervivencia");
         }
       }
       setRandomWords(words);
@@ -81,6 +84,11 @@ const EscapeSequence: React.FC = () => {
     }
   }
   useEffect(() => {
+    const secured = VerifyUser();
+    if (!secured) {
+      router.push("/login");
+      return;
+    }
     getWords();
   }, []);
   return (
