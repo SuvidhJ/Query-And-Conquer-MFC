@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
 
       {/* Conditionally Render Content or Video */}
       {!entered ? (
-        <div className="w-[90%] h-[80%] p-16 overflow-y-auto relative">
+        <div className="w-full md:w-[90%] h-[80%] p-4 md:p-16 relative -top-12 md:top-0">
           <Content onEnterClick={handleEnterClick} />
         </div>
       ) : (
