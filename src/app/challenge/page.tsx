@@ -14,7 +14,7 @@ const EscapeSequence: React.FC = () => {
     "cherry",
     "date",
   ]);
-  const correctSequence = ["supervivencia", "del", "más", "apto"];
+  const correctSequence = ["supervivencia", "del", "mas", "apto"];
   const [place, setPlace] = useState("");
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -36,7 +36,7 @@ const EscapeSequence: React.FC = () => {
       if (!id) return;
       const response = await axiosInstance.get(`user/${id}/location`);
       if (response.data) {
-        setPlace(response.data.place);
+        setPlace(response.data.location);
       }
     } catch (error) {
       toast.error("Failed to fetch the location");
@@ -69,13 +69,13 @@ const EscapeSequence: React.FC = () => {
         if (data.RoomA) {
           words.push("del");
         }
-        if (data.roomB) {
+        if (data.RoomB) {
           words.push("apto");
         }
-        if (data.roomC) {
+        if (data.RoomC) {
           words.push("mas");
         }
-        if (data.roomD) {
+        if (data.RoomD) {
           words.push("supervivencia");
         }
       }
