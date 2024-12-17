@@ -15,7 +15,12 @@ type doors = "obsidian liar" | "onyx hall" | "shadow crypt" | "ebon veil" | "";
 type data = {
   Question: string;
   QuestionId: number;
+  QuestionImage: string;
   Room: string;
+  OptionA: string;
+  OptionB: string;
+  OptionC: string;
+  OptionD: string;
   Answered: string;
 };
 export default function DoorPage({ params }: { params: { id: string } }) {
@@ -29,6 +34,8 @@ export default function DoorPage({ params }: { params: { id: string } }) {
   const [clue, setClue] = useState("");
   const [isCluePresent, setIsCluePresent] = useState(false);
   const [doorId, setDoorId] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   // const handleClick = () => {};
   useEffect(() => {
     const secured = VerifyUser();
@@ -41,6 +48,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       setDoorName(params.id.split("%20").join(" ") as doors);
     }
   }, []);
+
   useEffect(() => {
     const userId = localStorage.getItem("id");
     (async () => {
@@ -68,6 +76,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       }
     })();
   }, [fetchAgain]);
+
   async function handleSubmitQuestion() {
     const userId = localStorage.getItem("id");
     if (!answer || answer === "") {
@@ -87,17 +96,19 @@ export default function DoorPage({ params }: { params: { id: string } }) {
         }
       );
       if (response.data.error) {
-        toast.error(response.data.error || "Failed to submit answer!");
-        return;
+        throw new Error(response.data.error);
       }
       if (response.data.message) {
         toast.success(response.data.success || "Answer submitted!");
       }
+      setAnswer("");
+      setSelectedIndex(-1)
       setFetchAgain(fetchAgain + 1);
     } catch (error) {
-      toast.error("Failed to submit answer!");
+      toast.error("Incorrect Answer or Submission Failed!");
     }
   }
+
   async function handleClickEscape() {
     const index = doorData.findIndex(
       (door) => door === params.id.split("%20").join(" ")
@@ -117,8 +128,9 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       setEscapeOpen(false);
     }
   }
+
   return (
-    <div className="bg-[url('/images/bg1.png')] bg-cover h-screen w-full overflow-hidden flex flex-col items-center justify-center relative gap-6 pt-4">
+    <div className="bg-[url('/images/bg1.png')] bg-cover h-full min-h-screen w-full overflow-hidden flex flex-col items-center justify-center relative gap-6 pt-4">
       <button
         className="text-sm font-semibold font-geistMonoVF bg-black absolute top-2 right-2 text-white px-12 py-2 rounded-md"
         onClick={() => {
@@ -130,7 +142,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       </button>
       {doorName.length > 0 && !isCluePresent && (
         <>
-          <div className="relative w-[90%] h-[80vh] flex flex-col p-8">
+          <div className="relative w-[90%] flex flex-col p-8">
             <Image
               src="/images/transparent.png"
               alt=""
@@ -142,15 +154,31 @@ export default function DoorPage({ params }: { params: { id: string } }) {
               {doorName}
             </h1>
             <div className="flex flex-col w-full h-full mt-12 gap-10 relative z-10">
+            {data?.QuestionImage && <div className="w-full flex justify-center">
+              <Image
+                src={data.QuestionImage} 
+                width={400}
+                height={400}
+                alt="Question"  
+                className="w-full max-w-screen-md"
+                />
+            </div>}
               <p className=" bg-transparent outline-none text-white mx-auto md:w-3/4 w-full py-2 text-sm md:text-base ">
                 {data?.Question}
               </p>
-              <input
+              {[data?.OptionA, data?.OptionB, data?.OptionC, data?.OptionD].map((option, index)=>(
+                <p key={index} className={`bg-[#bb986a] outline-none font-medium w-full md:w-[70%] mx-auto px-4 py-3 rounded-lg md:rounded-2xl text-sm md:text-xl placeholder:text-black text-black cursor-pointer1 ${selectedIndex == index && 'bg-orange-400'}`} onClick={()=>{
+                  setAnswer(option!)
+                  setSelectedIndex(index)
+                }}>{option}</p>
+              ))}
+              {/* <input
                 type="text"
                 className=" bg-[#bb986a] outline-none font-medium w-full md:w-[70%] mx-auto px-4 py-3 rounded-lg md:rounded-2xl text-sm md:text-xl placeholder:text-black text-black"
                 placeholder="Write your answer here"
+                value={answer}
                 onChange={(e) => setAnswer(e.target.value.trim().toLowerCase())}
-              />
+              /> */}
               <button
                 onClick={handleSubmitQuestion}
                 className="bg-[#B69E75] w-fit rounded-lg px-12 mx-auto text-center pt-2 pb-2 font-geistMonoVF font-extrabold"
@@ -198,13 +226,13 @@ export default function DoorPage({ params }: { params: { id: string } }) {
           )}
         </>
       )}
-      {isCluePresent && (
+      {/* {isCluePresent && (
         <div className="text-2xl text-white font-geistMonoVF flex flex-col items-center justify-center">
           <h1>Your Clue</h1>
           <br />
           <h3 className="font-bold text-4xl">{clue.split(":")[1]}</h3>
         </div>
-      )}
+      )} */}
       {doorName.length === 0 && (
         <>
           <div className="bg-[#00000050] backdrop-blur-sm w-1/2 h-1/3 flex flex-col gap-3 items-center justify-center  font-irish text-4xl font-semibold rounded-xl text-white">

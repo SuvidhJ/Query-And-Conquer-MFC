@@ -31,16 +31,16 @@ const EscapeSequence: React.FC = () => {
     );
   };
   async function getPlace() {
-    try {
-      const id = localStorage.getItem("id");
-      if (!id) return;
-      const response = await axiosInstance.get(`user/${id}/location`);
-      if (response.data) {
-        setPlace(response.data.location);
-      }
-    } catch (error) {
-      toast.error("Failed to fetch the location");
-    }
+    // try {
+    //   const id = localStorage.getItem("id");
+    //   if (!id) return;
+    //   const response = await axiosInstance.get(`user/${id}/location`);
+    //   if (response.data) {
+    //     setPlace(response.data.location);
+    //   }
+    // } catch (error) {
+    //   toast.error("Failed to fetch the location");
+    // }
   }
   const checkSequence = () => {
     if (selectedWords.length === 4) {
@@ -56,33 +56,33 @@ const EscapeSequence: React.FC = () => {
     }
   };
   async function getWords() {
-    try {
-      const id = localStorage.getItem("id");
-      if (!id) {
-        throw new Error("Failed to fetch the clues!");
-      }
-      const response = await axiosInstance.get(`/user/${id}/roomstatus`);
-      const data = response.data.IsRoomsDone;
-      const words = [];
-      console.log(data);
-      if (data) {
-        if (data.RoomA) {
-          words.push("del");
-        }
-        if (data.RoomB) {
-          words.push("apto");
-        }
-        if (data.RoomC) {
-          words.push("mas");
-        }
-        if (data.RoomD) {
-          words.push("supervivencia");
-        }
-      }
-      setRandomWords(words);
-    } catch (error) {
-      toast.error("Failed to fetch the clues!");
-    }
+    // try {
+      // const id = localStorage.getItem("id");
+      // if (!id) {
+      //   throw new Error("Failed to fetch the clues!");
+      // }
+    //   const response = await axiosInstance.get(`/user/${id}/roomstatus`);
+    //   const data = response.data.IsRoomsDone;
+    //   const words = [];
+    //   console.log(data);
+    //   if (data) {
+    //     if (data.RoomA) {
+    //       words.push("del");
+    //     }
+    //     if (data.RoomB) {
+    //       words.push("apto");
+    //     }
+    //     if (data.RoomC) {
+    //       words.push("mas");
+    //     }
+    //     if (data.RoomD) {
+    //       words.push("supervivencia");
+    //     }
+    //   }
+    //   setRandomWords(words);
+    // } catch (error) {
+    //   toast.error("Failed to fetch the clues!");
+    // }
   }
   useEffect(() => {
     const secured = VerifyUser();

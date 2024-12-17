@@ -22,7 +22,7 @@ const DoorComponent = ({
         height={50}
         className="w-32 md:w-40 h-auto"
       />
-      <Image src="/images/door.png" alt="" width={300} height={200} />
+      <Image src="/images/door.png" alt="" width={300} height={200} className="" />
       <div
         onClick={() => {
           setDoor(id - 1);

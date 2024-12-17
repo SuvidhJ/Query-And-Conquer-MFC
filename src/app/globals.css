@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  width: 100%;
+  height: 100%;
+}
+
 @font-face {
   font-family: geistMonoVF;
   src: url("/fonts/GeistMonoVF.woff");
@@ -10,4 +15,41 @@
 @font-face {
   font-family: geistVF;
   src: url("/fonts/GeistVF.woff");
+}
+
+@font-face {
+  font-family: "audiowide" ;
+  src: url("/fonts/audiowide.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: "elegant" ;
+  src: url("/fonts/elegant.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "earthorbiter" ;
+  src: url("/fonts/earthorbiter.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "fade" ;
+  src: url("/fonts/fade.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "stickmarket" ;
+  src: url("/fonts/stickmarket.otf") format("opentype");
+}
+
+@layer utilities {
+  .cursor-fox {
+    cursor: url("/icons/fox-32.png") 16 16, auto;
+  }
+  .cursor-mouse {
+    cursor: url("/icons/mouse-32.png") 16 16, auto;
+  }
+  .cursor-stick {
+    cursor: url("/icons/game-32.png") 16 16, auto;
+  }
 }

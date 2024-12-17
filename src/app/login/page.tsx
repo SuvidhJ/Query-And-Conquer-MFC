@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import "../bg.css"
 import Image from "next/image";
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/constants";
@@ -7,6 +8,7 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axiosInstance from "@/lib/axios";
 import { useRouter } from "next/navigation";
+
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const [teamName, setTeamName] = useState<string>("");
@@ -25,7 +27,7 @@ const LoginPage: React.FC = () => {
       return;
     }
     try {
-      const response = await axiosInstance.post("/user/login", {
+      const response = await axiosInstance.post("user/login", {
         Username: teamName,
         Password: password,
       });
@@ -45,19 +47,19 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-screen overflow-hidden -z-50">
+      <div className="fixed bottom-0 right-0 left-0 top-0 w-full h-full min-h-screen overflow-hidden -z-50 bg-neutral-800 opacity-90">
         <Image
           fill={true}
-          src="/images/hauntedHouse.webp"
+          src="/images/login-new.jpg"
           alt="background image"
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center opacity-80"
         />
       </div>
 
       <div className="w-full h-full flex items-center justify-center">
-        <div className="w-[90%] h-[80%] max-sm:w-[95%] flex items-center justify-center">
-          <div className="bg-[#00000080] rounded-3xl pb-32 w-full h-full z-0  shadow-md l flex flex-col items-center justify-center">
-            <h2 className="text-6xl fot-bold text-white font-semibold text-center font-geistMonoVF mb-24">
+        <div className="w-[80%] h-[80%] max-sm:w-[95%] flex items-center justify-center bg-slate-600 bg-opacity-90 rounded-3xl">
+          <div className="bg-[#00000080] rounded-3xl w-full h-full z-0  shadow-md l flex flex-col items-center justify-center">
+            <h2 className="text-6xl fot-bold text-white font-semibold text-center font-audiowide mb-24">
               LOG IN
             </h2>
             <form
@@ -68,7 +70,7 @@ const LoginPage: React.FC = () => {
                 <div className="w-[500px] max-sm:w-full px-4">
                   <label
                     htmlFor="teamName"
-                    className="block text-2xl font-light text-white font-geistMonoVF"
+                    className="block text-2xl font-light text-white font-elegant"
                   >
                     TEAM NAME
                   </label>
@@ -85,7 +87,7 @@ const LoginPage: React.FC = () => {
                 <div className="w-[500px] max-sm:w-full px-4">
                   <label
                     htmlFor="password"
-                    className="block text-2xl font-light text-white font-geistMonoVF"
+                    className="block text-2xl font-light text-white font-elegant"
                   >
                     PASSWORD
                   </label>
@@ -101,7 +103,7 @@ const LoginPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-[200px] bg-[#00698D66] text-white font-medium py-2 px-4 rounded-full"
+                className="w-[200px] bg-[#00698D66] text-white font-medium py-2 px-4 rounded-full font-elegant"
               >
                 SUBMIT
               </button>

@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import VerifyUser from "@/lib/routeSecure";
 import { doorIds } from "@/lib/constants";
 import Cookies from "js-cookie";
+import "../bg.css"
+
 const DoorsPage = () => {
   const router = useRouter();
   const [selectedDoor, setSelectedDoor] = useState<number>(-1);
@@ -39,15 +41,15 @@ const DoorsPage = () => {
         setSelectedDoor(-1);
       }
     })();
-  }, [selectedDoor]);
+  }, [selectedDoor, router]);
   return (
-    <div className="bg-[url('/images/doorbg.png')] relative h-screen w-full overflow-hidden  ">
+    <div className="bg-[url('/images/doorbg.png')] relative h-full min-h-screen w-full overflow-hidden shirt">
       <Image
-        src="/images/image 14.png"
+        src="/images/doors.jpg"
         alt=""
         width={1920}
         height={1080}
-        className="absolute top-0 left-0 w-full h-full z-[0]"
+        className="absolute top-0 left-0 w-full h-full z-[0] opacity-30"
       />
       <button
         className="text-sm font-semibold font-geistMonoVF bg-black absolute top-2 right-2 text-white px-12 py-2 rounded-md"
@@ -66,14 +68,14 @@ const DoorsPage = () => {
             <DoorComponent id={3} setDoor={setSelectedDoor} />
             <DoorComponent id={4} setDoor={setSelectedDoor} />
           </div>
-          <button
+          {/* <button
             className="px-12 py-2 bg-[#7d4a34] relative z-[100] rounded-full text-white border-2 border-black font-geistMonoVF w-fit mb-16"
             onClick={() => {
               router.push("/challenge");
             }}
           >
             Decrypt the clues
-          </button>
+          </button> */}
         </div>
       )}
       {mutex && (

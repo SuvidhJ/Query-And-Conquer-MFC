@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 // });
 
 export const metadata: Metadata = {
-  title: "Code to Survive",
+  title: "Query And Conquer",
   description: "Mozilla Firefox",
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="w-full min-h-screen h-full">
         <ToastContainer />
         {children}
       </body>
