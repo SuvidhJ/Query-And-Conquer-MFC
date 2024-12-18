@@ -72,7 +72,7 @@ const LoginPage: React.FC = () => {
                     htmlFor="teamName"
                     className="block text-2xl font-light text-white font-elegant"
                   >
-                    TEAM NAME
+                    USERNAME
                   </label>
                 </div>
                 <input

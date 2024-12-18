@@ -61,7 +61,7 @@ const DoorsPage = () => {
         Logout
       </button>
       {!mutex && (
-        <div className="flex flex-col  w-full h-full items-center justify-between">
+        <div className="flex flex-col w-full h-full min-h-screen items-center justify-between">
           <div className="z-[100] relative grid grid-cols-2 gap-8 lg:gap-0 lg:grid-cols-4  top-32">
             <DoorComponent id={1} setDoor={setSelectedDoor} />
             <DoorComponent id={2} setDoor={setSelectedDoor} />

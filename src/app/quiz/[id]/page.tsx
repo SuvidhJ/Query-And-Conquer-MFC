@@ -56,6 +56,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
         const response = await axiosInstance.get(
           `/question/${userId}/getQuestions`
         );
+        // console.log(response.data)
         if (response.status !== 200) {
           toast.error("Failed to fetch question! please try again");
           setError(true);
@@ -85,7 +86,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     }
     if (!userId) return;
     try {
-      console.log(data);
+      // console.log(data);
       const response = await axiosInstance.post(
         `/question/${userId}/postAnswer`,
         {
@@ -101,11 +102,12 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       if (response.data.message) {
         toast.success(response.data.success || "Answer submitted!");
       }
-      setAnswer("");
-      setSelectedIndex(-1)
-      setFetchAgain(fetchAgain + 1);
     } catch (error) {
       toast.error("Incorrect Answer or Submission Failed!");
+    } finally {
+      setAnswer("");
+      setSelectedIndex(-1);
+      setFetchAgain(fetchAgain+1);
     }
   }
 
