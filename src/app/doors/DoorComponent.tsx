@@ -5,6 +5,7 @@ export const doorData = [
   "onyx hall",
   "shadow crypt",
   "ebon veil",
+  "shadow fortress",
 ];
 const DoorComponent = ({
   id,

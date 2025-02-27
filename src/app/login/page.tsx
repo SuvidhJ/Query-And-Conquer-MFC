@@ -13,13 +13,14 @@ const LoginPage: React.FC = () => {
   const router = useRouter();
   const [teamName, setTeamName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  useEffect(() => {
-    const token = Cookies.get("token");
-    const id = localStorage.getItem("id");
-    if (token && id) {
-      router.push("/doors");
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   const token = Cookies.get("token");
+  //   const id = localStorage.getItem("id");
+  //   if (token && id) {
+  //     router.push("/doors");
+  //   }
+  // }, []);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!teamName || !password) {
@@ -36,7 +37,7 @@ const LoginPage: React.FC = () => {
         return;
       }
       toast.success("Login Successfull");
-      Cookies.set("token", response.data.token);
+      localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
       localStorage.setItem("username", response.data.username);
       router.push("/doors");

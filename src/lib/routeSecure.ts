@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
 export default function VerifyUser() {
-  const token = Cookies.get("token");
+  const token = localStorage.getItem("token");
   if (!token || token === "") {
     return false;
   }

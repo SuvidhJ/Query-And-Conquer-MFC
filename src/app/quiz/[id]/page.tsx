@@ -3,19 +3,19 @@ import { doorData } from "@/app/doors/DoorComponent";
 import axiosInstance from "@/lib/axios";
 import { BACKEND_URL, doorIds } from "@/lib/constants";
 import VerifyUser from "@/lib/routeSecure";
-import axios from "axios";
-// import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-type doors = "obsidian liar" | "onyx hall" | "shadow crypt" | "ebon veil" | "";
+type doors = "obsidian liar" | "onyx hall" | "shadow crypt" | "ebon veil" | "shadow fortress" | "";
 type data = {
   Question: string;
   QuestionId: number;
   QuestionImage: string;
+  AudioFile?: string;
+  TextFile?: string; 
   Room: string;
   OptionA: string;
   OptionB: string;
@@ -24,6 +24,7 @@ type data = {
   Answered: string;
 };
 export default function DoorPage({ params }: { params: { id: string } }) {
+  
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(false);
   const [doorName, setDoorName] = useState<doors>("");
@@ -47,7 +48,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     } else {
       setDoorName(params.id.split("%20").join(" ") as doors);
     }
-  }, []);
+  }, [params.id, router]);
 
   useEffect(() => {
     const userId = localStorage.getItem("id");
@@ -56,7 +57,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
         const response = await axiosInstance.get(
           `/question/${userId}/getQuestions`
         );
-        // console.log(response.data)
+        console.log(response.data)
         if (response.status !== 200) {
           toast.error("Failed to fetch question! please try again");
           setError(true);
@@ -73,10 +74,10 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       } catch (error) {
         toast.error("Failed to fetch the questions");
         setError(true);
-        // router.push("/doors");
+        router.push("/doors");
       }
     })();
-  }, [fetchAgain]);
+  }, [fetchAgain, router]);
 
   async function handleSubmitQuestion() {
     const userId = localStorage.getItem("id");
@@ -86,7 +87,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     }
     if (!userId) return;
     try {
-      // console.log(data);
+      console.log(data);
       const response = await axiosInstance.post(
         `/question/${userId}/postAnswer`,
         {
@@ -107,8 +108,17 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     } finally {
       setAnswer("");
       setSelectedIndex(-1);
-      setFetchAgain(fetchAgain+1);
+      setFetchAgain(fetchAgain + 1);
     }
+  }
+
+  function convertDriveLink(url: string) {
+    if (!url.includes("drive.google.com")) return url;
+
+    const fileIdMatch = url.match(/d\/(.+?)\//);
+    if (!fileIdMatch) return url; 
+
+    return `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
   }
 
   async function handleClickEscape() {
@@ -136,7 +146,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
       <button
         className="text-sm font-semibold font-geistMonoVF bg-black absolute top-2 right-2 text-white px-12 py-2 rounded-md"
         onClick={() => {
-          Cookies.remove("token");
+          localStorage.removeItem("token");
           router.push("/login");
         }}
       >
@@ -156,31 +166,44 @@ export default function DoorPage({ params }: { params: { id: string } }) {
               {doorName}
             </h1>
             <div className="flex flex-col w-full h-full mt-12 gap-10 relative z-10">
-            {data?.QuestionImage && <div className="w-full flex justify-center">
-              <Image
-                src={data.QuestionImage} 
-                width={400}
-                height={400}
-                alt="Question"  
-                className="w-full max-w-screen-md"
+              {data?.QuestionImage && <div className="w-full flex justify-center">
+                <Image
+                  src={data.QuestionImage}
+                  width={400}
+                  height={400}
+                  alt="Question"
+                  className="w-full max-w-screen-md"
                 />
-            </div>}
+              </div>}
+              {data?.AudioFile && (
+                <div className="w-full flex justify-center">
+                  <audio controls className="w-full max-w-screen-md">
+                    <source src={convertDriveLink(data.AudioFile)} type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
+              {data?.TextFile && (
+                <div className="w-full flex justify-center">
+                  <a
+                    href={convertDriveLink(data.TextFile)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 underline"
+                  >
+                    View Text File
+                  </a>
+                </div>
+              )}
               <p className=" bg-transparent outline-none text-white mx-auto md:w-3/4 w-full py-2 text-sm md:text-base ">
                 {data?.Question}
               </p>
-              {[data?.OptionA, data?.OptionB, data?.OptionC, data?.OptionD].map((option, index)=>(
-                <p key={index} className={`bg-[#bb986a] outline-none font-medium w-full md:w-[70%] mx-auto px-4 py-3 rounded-lg md:rounded-2xl text-sm md:text-xl placeholder:text-black text-black cursor-pointer1 ${selectedIndex == index && 'bg-orange-400'}`} onClick={()=>{
+              {[data?.OptionA, data?.OptionB, data?.OptionC, data?.OptionD].map((option, index) => (
+                <p key={index} className={`bg-[#bb986a] outline-none font-medium w-full md:w-[70%] mx-auto px-4 py-3 rounded-lg md:rounded-2xl text-sm md:text-xl placeholder:text-black text-black cursor-pointer1 ${selectedIndex == index && 'bg-orange-400'}`} onClick={() => {
                   setAnswer(option!)
                   setSelectedIndex(index)
                 }}>{option}</p>
               ))}
-              {/* <input
-                type="text"
-                className=" bg-[#bb986a] outline-none font-medium w-full md:w-[70%] mx-auto px-4 py-3 rounded-lg md:rounded-2xl text-sm md:text-xl placeholder:text-black text-black"
-                placeholder="Write your answer here"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value.trim().toLowerCase())}
-              /> */}
               <button
                 onClick={handleSubmitQuestion}
                 className="bg-[#B69E75] w-fit rounded-lg px-12 mx-auto text-center pt-2 pb-2 font-geistMonoVF font-extrabold"
@@ -228,13 +251,6 @@ export default function DoorPage({ params }: { params: { id: string } }) {
           )}
         </>
       )}
-      {/* {isCluePresent && (
-        <div className="text-2xl text-white font-geistMonoVF flex flex-col items-center justify-center">
-          <h1>Your Clue</h1>
-          <br />
-          <h3 className="font-bold text-4xl">{clue.split(":")[1]}</h3>
-        </div>
-      )} */}
       {doorName.length === 0 && (
         <>
           <div className="bg-[#00000050] backdrop-blur-sm w-1/2 h-1/3 flex flex-col gap-3 items-center justify-center  font-irish text-4xl font-semibold rounded-xl text-white">

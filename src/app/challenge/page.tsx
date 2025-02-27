@@ -85,12 +85,12 @@ const EscapeSequence: React.FC = () => {
     // }
   }
   useEffect(() => {
-    const secured = VerifyUser();
-    if (!secured) {
-      router.push("/login");
-      return;
-    }
-    getWords();
+    // const secured = VerifyUser();
+    // if (!secured) {
+    //   router.push("/login");
+    //   return;
+    // }
+    // getWords();
   }, []);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen">
