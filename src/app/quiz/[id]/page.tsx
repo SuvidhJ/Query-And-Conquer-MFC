@@ -15,7 +15,7 @@ type data = {
   QuestionId: number;
   QuestionImage: string;
   AudioFile?: string;
-  TextFile?: string; 
+  TextFile?: string;
   Room: string;
   OptionA: string;
   OptionB: string;
@@ -24,7 +24,7 @@ type data = {
   Answered: string;
 };
 export default function DoorPage({ params }: { params: { id: string } }) {
-  
+
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(false);
   const [doorName, setDoorName] = useState<doors>("");
@@ -116,7 +116,7 @@ export default function DoorPage({ params }: { params: { id: string } }) {
     if (!url.includes("drive.google.com")) return url;
 
     const fileIdMatch = url.match(/d\/(.+?)\//);
-    if (!fileIdMatch) return url; 
+    if (!fileIdMatch) return url;
 
     return `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
   }
@@ -175,24 +175,9 @@ export default function DoorPage({ params }: { params: { id: string } }) {
                   className="w-full max-w-screen-md"
                 />
               </div>}
-              {data?.AudioFile && (
+              {data?.QuestionId === 4 && (
                 <div className="w-full flex justify-center">
-                  <audio controls className="w-full max-w-screen-md">
-                    <source src={convertDriveLink(data.AudioFile)} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              )}
-              {data?.TextFile && (
-                <div className="w-full flex justify-center">
-                  <a
-                    href={convertDriveLink(data.TextFile)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-400 underline"
-                  >
-                    View Text File
-                  </a>
+                    <a href="https://drive.google.com/file/d/1PqoBEcLoyJr_Q4pRMlTE6q5Oh3cADWyU/view?usp=sharing" className="text-white "> Audio Stenograph</a>
                 </div>
               )}
               <p className=" bg-transparent outline-none text-white mx-auto md:w-3/4 w-full py-2 text-sm md:text-base ">
